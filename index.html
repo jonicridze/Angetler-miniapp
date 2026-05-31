@@ -14,32 +14,26 @@
     .menu-title { text-align: center; padding: 20px; font-size: 22px; color: #e74c3c; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px 20px; }
     .card { background: #2c2c2c; border-radius: 12px; overflow: hidden; }
-    .card img { width: 100%; height: 130px; object-fit: cover; }
+    .card-emoji { width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #3a3a3a; }
     .card-body { padding: 10px; }
     .card-body h3 { font-size: 14px; margin-bottom: 5px; }
     .card-body p { font-size: 12px; color: #aaa; margin-bottom: 8px; }
     .card-footer { display: flex; justify-content: space-between; align-items: center; }
     .price { color: #e74c3c; font-weight: bold; font-size: 15px; }
     .qty-control { display: flex; align-items: center; gap: 8px; }
-    .qty-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 30px; height: 30px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .qty-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 30px; height: 30px; font-size: 20px; cursor: pointer; }
     .qty-num { font-size: 16px; min-width: 16px; text-align: center; }
-    .add-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 30px; height: 30px; font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .add-btn { background: #e74c3c; color: white; border: none; border-radius: 8px; width: 30px; height: 30px; font-size: 20px; cursor: pointer; }
     .cart-bar { position: fixed; bottom: 0; width: 100%; background: #e74c3c; padding: 15px 20px; display: none; justify-content: space-between; align-items: center; z-index: 999; }
     .cart-bar span { font-size: 16px; font-weight: bold; }
     .cart-btn { background: white; color: #e74c3c; border: none; border-radius: 8px; padding: 8px 20px; font-weight: bold; cursor: pointer; font-size: 15px; }
-
-    /* Страница корзины */
     .page { display: none; }
     .page.active { display: block; }
-    .back-btn { background: none; border: none; color: #e74c3c; font-size: 16px; cursor: pointer; padding: 15px; display: flex; align-items: center; gap: 8px; }
-    .cart-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #333; }
-    .cart-item-name { font-size: 15px; }
+    .back-btn { background: none; border: none; color: #e74c3c; font-size: 16px; cursor: pointer; padding: 15px; }
+    .cart-item { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #333; }
     .cart-item-price { color: #e74c3c; font-weight: bold; }
     .cart-total { padding: 20px; font-size: 20px; font-weight: bold; text-align: right; }
     .order-btn { display: block; width: calc(100% - 30px); margin: 0 15px; background: #e74c3c; color: white; border: none; border-radius: 12px; padding: 16px; font-size: 18px; font-weight: bold; cursor: pointer; }
-    .empty-cart { text-align: center; padding: 60px 20px; color: #aaa; font-size: 18px; }
-
-    /* Страница успеха */
     .success-page { text-align: center; padding: 60px 20px; }
     .success-page .icon { font-size: 80px; margin-bottom: 20px; }
     .success-page h2 { font-size: 26px; margin-bottom: 10px; color: #2ecc71; }
@@ -49,7 +43,6 @@
 </head>
 <body>
 
-  <!-- Страница меню -->
   <div id="menuPage" class="page active">
     <div class="header">
       <h1>🍽️ Мой Ресторан</h1>
@@ -63,16 +56,14 @@
     </div>
   </div>
 
-  <!-- Страница корзины -->
   <div id="cartPage" class="page">
-   <button class="back-btn" onclick="showMenu()">← Назад в меню</button>
+    <button class="back-btn" onclick="showMenu()">← Назад в меню</button>
     <div class="menu-title">🛒 Корзина</div>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal"></div>
     <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
   </div>
 
-  <!-- Страница успеха -->
   <div id="successPage" class="page">
     <div class="success-page">
       <div class="icon">✅</div>
@@ -84,21 +75,21 @@
 
   <script>
     const dishes = [
-      { id: 1, name: 'Классический бургер', desc: 'Говядина, сыр, салат', price: 350, img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=300' },
-      { id: 2, name: 'Пицца Маргарита', desc: 'Томат, моцарелла, базилик', price: 490, img: 'https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=300' },
-      { id: 3, name: 'Суши сет', desc: '8 роллов, соус, имбирь', price: 650, img: 'https://images.unsplash.com/photo-1569050467447-ce54b3bbc37d?w=300' },
-      { id: 4, name: 'Чизкейк', desc: 'Клубника, сливочный сыр', price: 280, img: 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=300' },
-      { id: 5, name: 'Паста Карбонара', desc: 'Бекон, яйцо, пармезан', price: 420, img: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=300' },
-      { id: 6, name: 'Цезарь', desc: 'Курица, салат, крутоны', price: 320, img: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?w=300' },
+      { id: 1, name: 'Классический бургер', desc: 'Говядина, сыр, салат', price: 350, emoji: '🍔' },
+      { id: 2, name: 'Пицца Маргарита', desc: 'Томат, моцарелла, базилик', price: 490, emoji: '🍕' },
+      { id: 3, name: 'Суши сет', desc: '8 роллов, соус, имбирь', price: 650, emoji: '🍣' },
+      { id: 4, name: 'Чизкейк', desc: 'Клубника, сливочный сыр', price: 280, emoji: '🍰' },
+      { id: 5, name: 'Паста Карбонара', desc: 'Бекон, яйцо, пармезан', price: 420, emoji: '🍝' },
+      { id: 6, name: 'Салат Цезарь', desc: 'Курица, салат, крутоны', price: 320, emoji: '🥗' },
     ];
 
-    let cart = {}; // { id: quantity }
+    let cart = {};
 
     function renderMenu() {
       const grid = document.getElementById('menuGrid');
       grid.innerHTML = dishes.map(d => `
         <div class="card">
-          <img src="${d.img}" alt="${d.name}">
+          <div class="card-emoji">${d.emoji}</div>
           <div class="card-body">
             <h3>${d.name}</h3>
             <p>${d.desc}</p>
@@ -120,11 +111,7 @@
     }
 
     function removeItem(id) {
-      if (cart[id] > 1) {
-        cart[id]--;
-      } else {
-        delete cart[id];
-      }
+      if (cart[id] > 1) { cart[id]--; } else { delete cart[id]; }
       updateCtrl(id);
       updateCartBar();
     }
@@ -133,20 +120,19 @@
       const el = document.getElementById('ctrl-' + id);
       if (!el) return;
       if (cart[id]) {
-        el.innerHTML = `
-          <div class="qty-control">
-            <button class="qty-btn" onclick="removeItem(${id})">−</button>
-            <span class="qty-num">${cart[id]}</span>
-            <button class="qty-btn" onclick="addItem(${id})">+</button>
-          </div>`;
+        el.innerHTML = `<div class="qty-control">
+          <button class="qty-btn" onclick="removeItem(${id})">−</button>
+          <span class="qty-num">${cart[id]}</span>
+          <button class="qty-btn" onclick="addItem(${id})">+</button>
+        </div>`;
       } else {
         el.innerHTML = <button class="add-btn" onclick="addItem(${id})">+</button>;
       }
     }
 
     function updateCartBar() {
-      const total = getTotal();
       const count = Object.values(cart).reduce((a, b) => a + b, 0);
+      const total = getTotal();
       const bar = document.getElementById('cartBar');
       if (count > 0) {
         bar.style.display = 'flex';
@@ -165,17 +151,14 @@
 
     function showCart() {
       const items = document.getElementById('cartItems');
-      const count = Object.keys(cart).length;
-      if (count === 0) {
-        items.innerHTML = '<div class="empty-cart">Корзина пуста 🛒</div>';
+      if (Object.keys(cart).length === 0) {
+        items.innerHTML = '<div style="text-align:center;padding:60px;color:#aaa">Корзина пуста 🛒</div>';
         document.getElementById('cartTotal').textContent = '';
       } else {
         items.innerHTML = Object.entries(cart).map(([id, qty]) => {
           const dish = dishes.find(d => d.id == id);
-         return `<div class="cart-item">
-            <div>
-              <div class="cart-item-name">${dish.name} × ${qty}</div>
-            </div>
+          return `<div class="cart-item">
+            <div>${dish.emoji} ${dish.name} × ${qty}</div>
             <div class="cart-item-price">${dish.price * qty} ₽</div>
           </div>`;
         }).join('');
@@ -199,12 +182,8 @@
       showPage('successPage');
     }
 
-    function resetOrder() {
-      showPage('menuPage');
-    }
-
+    function resetOrder() { showPage('menuPage'); }
     renderMenu();
   </script>
-
 </body>
 </html>
