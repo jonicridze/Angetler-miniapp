@@ -14,7 +14,7 @@
     .menu-title { text-align: center; padding: 20px; font-size: 22px; color: #e74c3c; }
     .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 15px 20px; }
     .card { background: #2c2c2c; border-radius: 12px; overflow: hidden; }
-    .card-emoji { width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #3a3a3a; }
+    .card-icon { width: 100%; height: 110px; display: flex; align-items: center; justify-content: center; font-size: 60px; background: #3a3a3a; }
     .card-body { padding: 10px; }
     .card-body h3 { font-size: 14px; margin-bottom: 5px; }
     .card-body p { font-size: 12px; color: #aaa; margin-bottom: 8px; }
@@ -35,7 +35,6 @@
     .cart-total { padding: 20px; font-size: 20px; font-weight: bold; text-align: right; }
     .order-btn { display: block; width: calc(100% - 30px); margin: 0 15px; background: #e74c3c; color: white; border: none; border-radius: 12px; padding: 16px; font-size: 18px; font-weight: bold; cursor: pointer; }
     .success-page { text-align: center; padding: 60px 20px; }
-    .success-page .icon { font-size: 80px; margin-bottom: 20px; }
     .success-page h2 { font-size: 26px; margin-bottom: 10px; color: #2ecc71; }
     .success-page p { color: #aaa; font-size: 16px; margin-bottom: 30px; }
     .success-page button { background: #e74c3c; color: white; border: none; border-radius: 12px; padding: 14px 30px; font-size: 16px; cursor: pointer; }
@@ -45,20 +44,20 @@
 
   <div id="menuPage" class="page active">
     <div class="header">
-      <h1>🍽️ Мой Ресторан</h1>
+      <h1>Мой Ресторан</h1>
       <p>Вкусно, быстро, с доставкой</p>
     </div>
-    <div class="menu-title">📋 Меню</div>
+    <div class="menu-title">Меню</div>
     <div class="menu-grid" id="menuGrid"></div>
     <div class="cart-bar" id="cartBar">
-      <span id="cartInfo">0 товаров — 0 ₽</span>
-      <button class="cart-btn" onclick="showCart()">Корзина 🛒</button>
+      <span id="cartInfo">0 товаров - 0 руб</span>
+      <button class="cart-btn" onclick="showCart()">Корзина</button>
     </div>
   </div>
 
   <div id="cartPage" class="page">
-    <button class="back-btn" onclick="showMenu()">← Назад в меню</button>
-    <div class="menu-title">🛒 Корзина</div>
+    <button class="back-btn" onclick="showMenu()">Назад в меню</button>
+    <div class="menu-title">Корзина</div>
     <div id="cartItems"></div>
     <div class="cart-total" id="cartTotal"></div>
     <button class="order-btn" onclick="placeOrder()">Оформить заказ</button>
@@ -66,42 +65,42 @@
 
   <div id="successPage" class="page">
     <div class="success-page">
-      <div class="icon">✅</div>
       <h2>Заказ принят!</h2>
-      <p>Мы уже готовим ваш заказ.<br>Ожидайте доставку в течение 30-40 минут.</p>
+      <p>Мы уже готовим ваш заказ. Ожидайте доставку в течение 30-40 минут.
+        </p>
       <button onclick="resetOrder()">Вернуться в меню</button>
     </div>
   </div>
 
   <script>
-    const dishes = [
-      { id: 1, name: 'Классический бургер', desc: 'Говядина, сыр, салат', price: 350, emoji: '🍔' },
-      { id: 2, name: 'Пицца Маргарита', desc: 'Томат, моцарелла, базилик', price: 490, emoji: '🍕' },
-      { id: 3, name: 'Суши сет', desc: '8 роллов, соус, имбирь', price: 650, emoji: '🍣' },
-      { id: 4, name: 'Чизкейк', desc: 'Клубника, сливочный сыр', price: 280, emoji: '🍰' },
-      { id: 5, name: 'Паста Карбонара', desc: 'Бекон, яйцо, пармезан', price: 420, emoji: '🍝' },
-      { id: 6, name: 'Салат Цезарь', desc: 'Курица, салат, крутоны', price: 320, emoji: '🥗' },
+    var dishes = [
+      { id: 1, name: "Классический бургер", desc: "Говядина, сыр, салат", price: 350, icon: "B" },
+      { id: 2, name: "Пицца Маргарита", desc: "Томат, моцарелла, базилик", price: 490, icon: "P" },
+      { id: 3, name: "Суши сет", desc: "8 роллов, соус, имбирь", price: 650, icon: "S" },
+      { id: 4, name: "Чизкейк", desc: "Клубника, сливочный сыр", price: 280, icon: "C" },
+      { id: 5, name: "Паста Карбонара", desc: "Бекон, яйцо, пармезан", price: 420, icon: "P" },
+      { id: 6, name: "Салат Цезарь", desc: "Курица, салат, крутоны", price: 320, icon: "S" }
     ];
 
-    let cart = {};
+    var cart = {};
 
     function renderMenu() {
-      const grid = document.getElementById('menuGrid');
-      grid.innerHTML = dishes.map(d => `
-        <div class="card">
-          <div class="card-emoji">${d.emoji}</div>
-          <div class="card-body">
-            <h3>${d.name}</h3>
-            <p>${d.desc}</p>
-            <div class="card-footer">
-              <span class="price">${d.price} ₽</span>
-              <div id="ctrl-${d.id}">
-                <button class="add-btn" onclick="addItem(${d.id})">+</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `).join('');
+      var grid = document.getElementById("menuGrid");
+      var html = "";
+      for (var i = 0; i < dishes.length; i++) {
+        var d = dishes[i];
+        html += '<div class="card">';
+        html += '<div class="card-icon">' + d.icon + '</div>';
+        html += '<div class="card-body">';
+        html += '<h3>' + d.name + '</h3>';
+        html += '<p>' + d.desc + '</p>';
+        html += '<div class="card-footer">';
+        html += '<span class="price">' + d.price + ' руб</span>';
+        html += '<div id="ctrl-' + d.id + '">';
+        html += '<button class="add-btn" onclick="addItem(' + d.id + ')">+</button>';
+        html += '</div></div></div></div>';
+      }
+      grid.innerHTML = html;
     }
 
     function addItem(id) {
@@ -117,72 +116,83 @@
     }
 
     function updateCtrl(id) {
-      const el = document.getElementById('ctrl-' + id);
+      var el = document.getElementById("ctrl-" + id);
       if (!el) return;
       if (cart[id]) {
-        el.innerHTML = `<div class="qty-control">
-          <button class="qty-btn" onclick="removeItem(${id})">−</button>
-          <span class="qty-num">${cart[id]}</span>
-          <button class="qty-btn" onclick="addItem(${id})">+</button>
-        </div>`;
+        el.innerHTML = '<div class="qty-control"><button class="qty-btn" onclick="removeItem(' + id + ')">-</button><span class="qty-num">' + cart[id] + '</span><button class="qty-btn" onclick="addItem(' + id + ')">+</button></div>';
       } else {
-        el.innerHTML = <button class="add-btn" onclick="addItem(${id})">+</button>;
+        el.innerHTML = '<button class="add-btn" onclick="addItem(' + id + ')">+</button>';
       }
     }
 
     function updateCartBar() {
-      const count = Object.values(cart).reduce((a, b) => a + b, 0);
-      const total = getTotal();
-      const bar = document.getElementById('cartBar');
+      var count = 0;
+      var total = 0;
+      for (var id in cart) {
+        count += cart[id];
+        for (var i = 0; i < dishes.length; i++) {
+          if (dishes[i].id == id) total += dishes[i].price * cart[id];
+        }
+      }
+      var bar = document.getElementById("cartBar");
       if (count > 0) {
-        bar.style.display = 'flex';
-        document.getElementById('cartInfo').textContent = count + ' товаров — ' + total + ' ₽';
+        bar.style.display = "flex";
+        document.getElementById("cartInfo").textContent = count + " товаров - " + total + " руб";
       } else {
-        bar.style.display = 'none';
+        bar.style.display = "none";
       }
     }
 
     function getTotal() {
-      return Object.entries(cart).reduce((sum, [id, qty]) => {
-        const dish = dishes.find(d => d.id == id);
-        return sum + dish.price * qty;
-      }, 0);
+      var total = 0;
+      for (var id in cart) {
+        for (var i = 0; i < dishes.length; i++) {
+          if (dishes[i].id == id) total += dishes[i].price * cart[id];
+        }
+      }
+      return total;
     }
 
     function showCart() {
-      const items = document.getElementById('cartItems');
-      if (Object.keys(cart).length === 0) {
-        items.innerHTML = '<div style="text-align:center;padding:60px;color:#aaa">Корзина пуста 🛒</div>';
-        document.getElementById('cartTotal').textContent = '';
+      var items = document.getElementById("cartItems");
+      var keys = Object.keys(cart);
+      if (keys.length === 0) {
+        items.innerHTML = '<div style="text-align:center;padding:60px;color:#aaa">Корзина пуста</div>';
+        document.getElementById("cartTotal").textContent = "";
       } else {
-        items.innerHTML = Object.entries(cart).map(([id, qty]) => {
-          const dish = dishes.find(d => d.id == id);
-          return `<div class="cart-item">
-            <div>${dish.emoji} ${dish.name} × ${qty}</div>
-            <div class="cart-item-price">${dish.price * qty} ₽</div>
-          </div>`;
-        }).join('');
-        document.getElementById('cartTotal').textContent = 'Итого: ' + getTotal() + ' ₽';
+        var html = "";
+        for (var id in cart) {
+          var dish = null;
+          for (var i = 0; i < dishes.length; i++) {
+            if (dishes[i].id == id) dish = dishes[i];
+          }
+          html += '<div class="cart-item"><div>' + dish.name + ' x' + cart[id] + '</div><div class="cart-item-price">' + dish.price * cart[id] + ' руб</div></div>';
+        }
+        items.innerHTML = html;
+        document.getElementById("cartTotal").textContent = "Итого: " + getTotal() + " руб";
       }
-      showPage('cartPage');
+      showPage("cartPage");
     }
 
-    function showMenu() { showPage('menuPage'); }
+    function showMenu() { showPage("menuPage"); }
 
     function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      var pages = document.querySelectorAll(".page");
+      for (var i = 0; i < pages.length; i++) pages[i].classList.remove("active");
+      document.
+        getElementById(id).classList.add("active");
       window.scrollTo(0, 0);
     }
 
     function placeOrder() {
       cart = {};
       updateCartBar();
-      dishes.forEach(d => updateCtrl(d.id));
-      showPage('successPage');
+      renderMenu();
+      showPage("successPage");
     }
 
-    function resetOrder() { showPage('menuPage'); }
+    function resetOrder() { showPage("menuPage"); }
+
     renderMenu();
   </script>
 </body>
